@@ -1,6 +1,5 @@
 # Icon Badge
 
-参考 [HammCn/svg-badge-tool](https://github.com/HammCn/svg-badge-tool) 的动态 SVG badge 服务。
 
 核心用法是直接在 HTML 或 README 中引用一个 URL，而不是打开页面复制粘贴：
 
