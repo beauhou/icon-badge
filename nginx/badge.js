@@ -100,4 +100,12 @@ function badge(r) {
   r.return(200, renderBadgeSvg(r.args || {}));
 }
 
-export default { badge };
+function indexOrBadge(r) {
+  if (firstFilled(r.args.key, r.args.label, r.args.value, r.args.message)) {
+    badge(r);
+    return;
+  }
+  r.internalRedirect('/index.html');
+}
+
+export default { badge, indexOrBadge };

@@ -85,12 +85,7 @@ http {
         index index.html;
 
         location = / {
-            js_content badge.badge;
-        }
-
-        location /ui/ {
-            alias /opt/www/icon-badge/;
-            try_files $uri $uri/ /ui/index.html;
+            js_content badge.indexOrBadge;
         }
 
         location = /badge.svg {
@@ -100,14 +95,18 @@ http {
         location = /icon-badge.svg {
             js_content badge.badge;
         }
+
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
     }
 }
 ```
 
-生成器页面：
+部署后必须确认动态接口返回 `image/svg+xml`，不能返回首页 HTML：
 
-```text
-https://svg.example.com/ui/
+```bash
+curl -I "https://svg.example.com/badge.svg?key=Lang&value=Java17&bg=green"
 ```
 
 ## 本地验证

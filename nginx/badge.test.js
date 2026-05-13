@@ -27,3 +27,10 @@ test('renders escaped svg for direct nginx response', () => {
   assert.match(svg, /&lt;JPA&gt;/);
   assert.match(svg, /#7c3aed/);
 });
+
+test('default export exposes root router and badge handler', async () => {
+  const module = await import('./badge.js');
+
+  assert.equal(typeof module.default.badge, 'function');
+  assert.equal(typeof module.default.indexOrBadge, 'function');
+});
