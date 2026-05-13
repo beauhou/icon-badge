@@ -16,6 +16,8 @@
 <img src="https://badge.beauhou.cn/label?label=License&message=MIT&bg=blue"/>
 ```
 
+默认样式：`flat`
+
 ## name / status
 
 ```html
@@ -23,12 +25,16 @@
 <img src="https://badge.beauhou.cn/status?name=Deploy&status=Ready&bg=purple"/>
 ```
 
+默认样式：`pill`
+
 ## name / version
 
 ```html
 <img src="https://badge.beauhou.cn/tech?name=SpringBoot&version=3"/>
 <img src="https://badge.beauhou.cn/tech?name=Java&version=17&bg=green"/>
 ```
+
+默认样式：`outline`
 
 ## 兼容路径
 
@@ -44,6 +50,7 @@ https://badge.beauhou.cn/icon-badge.svg?key=Lang&value=Java17&bg=green
 
 | 参数 | 说明 | 示例 |
 | --- | --- | --- |
+| `style` | 样式 | `classic`、`flat`、`pill`、`outline` |
 | `bg` | 右侧背景色 | `green`、`ff4500`、`#2da44e` |
 | `keyBg` | 左侧背景色 | `333333`、`#333333` |
 | `radius` | 圆角，0 到 10 | `3` |

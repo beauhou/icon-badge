@@ -45,3 +45,13 @@ test('default export exposes root router and badge handler', async () => {
   assert.equal(typeof module.default.status, 'function');
   assert.equal(typeof module.default.tech, 'function');
 });
+
+test('renders mode styles with distinct visual output', () => {
+  const labelSvg = badgeModule.renderBadgeSvg({ key: 'Build', value: 'Passing', style: 'flat' });
+  const statusSvg = badgeModule.renderBadgeSvg({ key: 'API', value: 'Online', style: 'pill' });
+  const techSvg = badgeModule.renderBadgeSvg({ key: 'Java', value: '17', style: 'outline' });
+
+  assert.match(labelSvg, /data-style="flat"/);
+  assert.match(statusSvg, /data-style="pill"/);
+  assert.match(techSvg, /data-style="outline"/);
+});

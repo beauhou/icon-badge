@@ -53,6 +53,19 @@ test('renders classic 20px svg badge with escaped text', () => {
   assert.doesNotMatch(svg, /animateMotion/);
 });
 
+test('renders different visual styles', () => {
+  const flat = renderBadgeSvg({ key: 'Build', value: 'Passing', style: 'flat' });
+  const pill = renderBadgeSvg({ key: 'API', value: 'Online', style: 'pill' });
+  const outline = renderBadgeSvg({ key: 'Java', value: '17', style: 'outline' });
+
+  assert.match(flat, /data-style="flat"/);
+  assert.match(flat, /rx="0"/);
+  assert.match(pill, /data-style="pill"/);
+  assert.match(pill, /rx="10"/);
+  assert.match(outline, /data-style="outline"/);
+  assert.match(outline, /stroke=/);
+});
+
 test('builds root http badge url', () => {
   const url = buildHttpBadgeUrl('https://svg.example.com', {
     key: 'Lang',
