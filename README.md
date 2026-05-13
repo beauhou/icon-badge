@@ -1,45 +1,108 @@
 # Icon Badge
 
-纯静态 SVG badge 生成器，可以直接部署在 Nginx 下。
+一个基于 Nginx njs 的动态 SVG badge 服务，同时保留可视化生成页面。
 
-## 使用方式
+目标用法类似：
 
-1. 将本目录作为 Nginx 静态站点根目录。
-2. 访问站点根路径打开生成器。
-3. 调整文本、颜色、图标和风格。
-4. 复制 Markdown/HTML，或下载 SVG 后放入 README、文档站、门户页中。
-
-根路径用于生成和说明；`/icon-badge.svg` 是默认静态 badge：
-
-```markdown
-![icon badge](./icon-badge.svg)
+```html
+<img src="https://svg.example.com?key=Lang&value=Java17&bg=green"/>
+<img src="https://svg.example.com?key=Base&value=SpringBoot3"/>
+<img src="https://svg.example.com?key=ORM&value=JPA"/>
+<img src="https://svg.example.com?key=DB&value=MySQL"/>
 ```
 
-## 支持能力
+也可以在 README 中使用：
 
-- 文本：左侧 label、右侧 message。
-- 图标：支持简短字符图标，如 `★`、`✓`、`⚡`。
-- 颜色：支持 `success`、`warning`、`critical`、`blue`、`purple` 等别名，也支持 `#2f80ed` 或 `2f80ed`。
-- 风格：`flat`、`flat-square`、`plastic`、`for-the-badge`、`outline`、`social`。
-- 输出：SVG 源码、Data URI、Markdown、HTML、SVG 文件下载。
+```markdown
+![Lang](https://svg.example.com?key=Lang&value=Java17&bg=green)
+```
 
-## Nginx 示例
+## 参数
+
+| 参数 | 说明 | 示例 |
+| --- | --- | --- |
+| `key` | 左侧文本 | `Lang` |
+| `value` | 右侧文本 | `Java17` |
+| `bg` | 右侧背景色 | `green`、`#2f80ed`、`2f80ed` |
+| `keyBg` | 左侧背景色 | `#555555` |
+| `logo` | 简短字符图标 | `*`、`OK` |
+| `style` | badge 风格 | `flat`、`flat-square`、`plastic`、`for-the-badge`、`outline`、`social` |
+
+兼容旧参数：`label` 等同于 `key`，`message` 等同于 `value`，`color` 等同于 `bg`，`labelColor` 等同于 `keyBg`。
+
+## 颜色别名
+
+支持：
+
+```text
+blue, cyan, gray, green, orange, pink, purple, red,
+success, warning, critical, inactive
+```
+
+也支持十六进制颜色：
+
+```text
+#2f80ed
+2f80ed
+```
+
+## Nginx njs 部署
+
+这种模式不需要单独启动 Node/Java 服务，但要求 Nginx 安装 `ngx_http_js_module`。
+
+把项目放到服务器：
+
+```bash
+/opt/www/icon-badge
+```
+
+Nginx 配置示例见：
+
+```text
+nginx/icon-badge.conf
+```
+
+核心配置：
 
 ```nginx
-server {
-    listen 80;
-    server_name badge.example.com;
-    root /path/to/icon-badge;
-    index index.html;
+load_module modules/ngx_http_js_module.so;
 
-    location / {
-        try_files $uri $uri/ /index.html;
+http {
+    js_import badge from /opt/www/icon-badge/nginx/badge.js;
+
+    server {
+        listen 80;
+        server_name svg.example.com;
+
+        root /opt/www/icon-badge;
+        index index.html;
+
+        location = / {
+            js_content badge.badge;
+        }
+
+        location /ui/ {
+            alias /opt/www/icon-badge/;
+            try_files $uri $uri/ /ui/index.html;
+        }
+
+        location = /icon-badge.svg {
+            js_content badge.badge;
+        }
     }
 }
 ```
 
-## 关于参数化直出
+访问：
 
-纯静态 Nginx 只能返回已经存在的文件，不能根据 `?label=...&message=...` 动态生成不同 SVG。
+```text
+https://svg.example.com?key=Lang&value=Java17&bg=green
+https://svg.example.com?key=Base&value=SpringBoot3
+https://svg.example.com/ui/
+```
 
-如果必须支持 `/icon-badge.svg?label=build&message=passing` 这种 URL 直接返回动态 badge，需要增加一个极小后端、Nginx njs/Lua，或在发布前预生成多个具体 SVG 文件。
+## 本地测试
+
+```bash
+npm test
+```

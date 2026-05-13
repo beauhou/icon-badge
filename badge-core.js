@@ -27,6 +27,10 @@ function clampText(value, fallback, maxLength = 64) {
   return (text || fallback).slice(0, maxLength);
 }
 
+function firstFilled(...values) {
+  return values.find((value) => value !== undefined && value !== null && String(value).trim() !== '');
+}
+
 function escapeXml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
@@ -64,11 +68,11 @@ function getReadableTextColor(hexColor) {
 
 export function normalizeBadgeOptions(input = {}) {
   const style = STYLE_CONFIG[input.style] ? input.style : 'flat';
-  const label = clampText(input.label, 'icon');
-  const message = clampText(input.message, 'badge');
+  const label = clampText(firstFilled(input.label, input.key), 'icon');
+  const message = clampText(firstFilled(input.message, input.value), 'badge');
   const logo = String(input.logo ?? '').trim().slice(0, 4);
-  const color = normalizeColor(input.color);
-  const labelColor = normalizeColor(input.labelColor || '#555555');
+  const color = normalizeColor(firstFilled(input.color, input.bg));
+  const labelColor = normalizeColor(firstFilled(input.labelColor, input.keyBg, '#555555'));
 
   return { label, message, logo, color, labelColor, style };
 }
@@ -123,9 +127,21 @@ export function buildBadgeUrl(basePath, input = {}) {
   return `${basePath}?${params.toString()}`;
 }
 
+export function buildHttpBadgeUrl(basePath, input = {}) {
+  const options = normalizeBadgeOptions(input);
+  const params = new URLSearchParams();
+  params.set('key', options.label);
+  params.set('value', options.message);
+  params.set('bg', input.bg || input.color || options.color);
+  if (options.logo) params.set('logo', options.logo);
+  if (options.style !== 'flat') params.set('style', options.style);
+  if (input.keyBg || input.labelColor) params.set('keyBg', input.keyBg || input.labelColor);
+  return `${basePath.replace(/\?$/, '')}?${params.toString()}`;
+}
+
 export function buildEmbedCodes(basePath, input = {}) {
   const options = normalizeBadgeOptions(input);
-  const url = buildBadgeUrl(basePath, input);
+  const url = buildHttpBadgeUrl(basePath, input);
   const alt = `${options.label}: ${options.message}`;
   const svg = renderBadgeSvg(options);
   const dataUri = svgToDataUri(svg);
@@ -144,9 +160,13 @@ export function optionsFromSearch(search = '') {
   const params = new URLSearchParams(search);
   return normalizeBadgeOptions({
     label: params.get('label'),
+    key: params.get('key'),
     message: params.get('message'),
+    value: params.get('value'),
     color: params.get('color'),
+    bg: params.get('bg'),
     labelColor: params.get('labelColor'),
+    keyBg: params.get('keyBg'),
     logo: params.get('logo'),
     style: params.get('style'),
   });

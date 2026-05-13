@@ -10,9 +10,9 @@
   <main class="shell">
     <section class="intro">
       <div>
-        <p class="eyebrow">Static SVG badge tool</p>
+        <p class="eyebrow">Dynamic SVG badge tool</p>
         <h1>Icon Badge</h1>
-        <p class="lead">生成可用于 README、文档页面、门户系统和普通 HTML 的 SVG badge。项目是纯静态文件，Nginx 直接指向本目录即可访问。</p>
+        <p class="lead">生成可用于 README、文档页面、门户系统和普通 HTML 的 SVG badge。配合 Nginx njs 后，可以通过 URL 参数直接返回 SVG。</p>
       </div>
       <a class="static-link" href="./icon-badge.svg">默认静态 badge</a>
     </section>
@@ -113,8 +113,8 @@
 
     <section class="notes">
       <h2>部署和使用</h2>
-      <p>Nginx 只需要把站点根目录指向本文件夹。访问根路径打开生成器；访问 <code>/icon-badge.svg</code> 返回默认静态 badge。</p>
-      <p>纯静态 Nginx 无法按 URL 查询参数实时拼接 SVG。需要参数化直出时，应增加一个极小后端、Nginx njs/Lua，或使用本页面生成后下载成具体 SVG 文件。</p>
+      <p>动态部署时使用 <code>nginx/badge.js</code> 和 <code>nginx/icon-badge.conf</code>。访问根路径并携带 <code>key</code>、<code>value</code>、<code>bg</code> 参数即可直接返回 SVG。</p>
+      <p>示例：<code>https://svg.example.com?key=Lang&amp;value=Java17&amp;bg=green</code>。生成器页面建议挂到 <code>/ui/</code>。</p>
     </section>
   </main>
   <script type="module" src="./app.js"></script>

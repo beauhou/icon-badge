@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildBadgeUrl,
+  buildHttpBadgeUrl,
   buildEmbedCodes,
   normalizeBadgeOptions,
   renderBadgeSvg,
@@ -15,6 +16,18 @@ test('normalizes missing options into a usable default badge', () => {
   assert.equal(options.message, 'badge');
   assert.equal(options.color, '#2f80ed');
   assert.equal(options.style, 'flat');
+});
+
+test('accepts key value bg aliases for http badge usage', () => {
+  const options = normalizeBadgeOptions({
+    key: 'Lang',
+    value: 'Java17',
+    bg: 'green',
+  });
+
+  assert.equal(options.label, 'Lang');
+  assert.equal(options.message, 'Java17');
+  assert.equal(options.color, '#2da44e');
 });
 
 test('renders svg badge with escaped text and selected style', () => {
@@ -46,6 +59,17 @@ test('builds direct svg url from relative base path', () => {
   );
 });
 
+test('builds hamm style http badge url', () => {
+  const url = buildHttpBadgeUrl('https://svg.example.com', {
+    label: 'Lang',
+    message: 'Java17',
+    color: 'green',
+    style: 'flat',
+  });
+
+  assert.equal(url, 'https://svg.example.com?key=Lang&value=Java17&bg=green');
+});
+
 test('builds markdown and html embed snippets', () => {
   const snippets = buildEmbedCodes('/icon-badge.svg', {
     label: 'api',
@@ -56,7 +80,7 @@ test('builds markdown and html embed snippets', () => {
 
   assert.equal(
     snippets.markdown,
-    '![api: v1](/icon-badge.svg?label=api&message=v1&color=blue&style=outline)',
+    '![api: v1](/icon-badge.svg?key=api&value=v1&bg=blue&style=outline)',
   );
   assert.match(snippets.html, /^<img src="\/icon-badge\.svg\?/);
   assert.match(snippets.html, /alt="api: v1"/);

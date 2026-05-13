@@ -1,6 +1,6 @@
 import {
   buildEmbedCodes,
-  buildBadgeUrl,
+  buildHttpBadgeUrl,
   optionsFromSearch,
   renderBadgeSvg,
 } from './badge-core.js';
@@ -30,14 +30,16 @@ function setInitialValues() {
 function updatePreview() {
   const options = getFormOptions();
   const svg = renderBadgeSvg(options);
-  const staticSvgUrl = `${window.location.origin}${window.location.pathname.replace(/\/?$/, '/')}icon-badge.svg`;
-  const generatorUrl = buildBadgeUrl(window.location.href.split('?')[0], options);
-  const embed = buildEmbedCodes(staticSvgUrl, options);
+  const endpointUrl = window.location.pathname.startsWith('/ui')
+    ? `${window.location.origin}/`
+    : window.location.href.split('?')[0];
+  const generatorUrl = buildHttpBadgeUrl(endpointUrl, options);
+  const embed = buildEmbedCodes(endpointUrl, options);
 
   preview.innerHTML = svg;
   svgCode.value = svg;
-  markdownCode.value = embed.markdownDataUri;
-  htmlCode.value = embed.htmlDataUri;
+  markdownCode.value = embed.markdown;
+  htmlCode.value = embed.html;
   dataUriCode.value = embed.dataUri;
   urlCode.value = generatorUrl;
   window.history.replaceState(null, '', `?${generatorUrl.split('?')[1]}`);
