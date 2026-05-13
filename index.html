@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Icon Badge Generator</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Static SVG badge tool</p>
+        <h1>Icon Badge</h1>
+        <p class="lead">生成可用于 README、文档页面、门户系统和普通 HTML 的 SVG badge。项目是纯静态文件，Nginx 直接指向本目录即可访问。</p>
+      </div>
+      <a class="static-link" href="./icon-badge.svg">默认静态 badge</a>
+    </section>
+
+    <section class="workspace">
+      <form class="panel controls" data-badge-form>
+        <label>
+          <span>左侧文本</span>
+          <input name="label" value="icon" maxlength="64" autocomplete="off">
+        </label>
+        <label>
+          <span>右侧文本</span>
+          <input name="message" value="badge" maxlength="64" autocomplete="off">
+        </label>
+        <label>
+          <span>图标字符</span>
+          <input name="logo" value="★" maxlength="4" autocomplete="off">
+        </label>
+        <label>
+          <span>主色</span>
+          <input name="color" value="success" list="colors" autocomplete="off">
+        </label>
+        <label>
+          <span>左侧底色</span>
+          <input name="labelColor" value="#555555" autocomplete="off">
+        </label>
+        <label>
+          <span>风格</span>
+          <select name="style">
+            <option value="flat">flat</option>
+            <option value="flat-square">flat-square</option>
+            <option value="plastic">plastic</option>
+            <option value="for-the-badge">for-the-badge</option>
+            <option value="outline">outline</option>
+            <option value="social">social</option>
+          </select>
+        </label>
+        <datalist id="colors">
+          <option value="blue"></option>
+          <option value="success"></option>
+          <option value="warning"></option>
+          <option value="critical"></option>
+          <option value="purple"></option>
+          <option value="#0f766e"></option>
+        </datalist>
+      </form>
+
+      <section class="panel result">
+        <div class="preview-wrap">
+          <div class="preview" data-preview></div>
+        </div>
+        <div class="actions">
+          <button type="button" data-download>下载 SVG</button>
+          <button type="button" data-copy="svg" data-label="复制 SVG">复制 SVG</button>
+          <button type="button" data-copy="markdown" data-label="复制 Markdown">复制 Markdown</button>
+          <button type="button" data-copy="html" data-label="复制 HTML">复制 HTML</button>
+        </div>
+      </section>
+    </section>
+
+    <section class="outputs">
+      <div class="code-block">
+        <div class="code-head">
+          <span>README Markdown</span>
+          <button type="button" data-copy="markdown" data-label="复制">复制</button>
+        </div>
+        <textarea data-markdown-code readonly></textarea>
+      </div>
+      <div class="code-block">
+        <div class="code-head">
+          <span>HTML</span>
+          <button type="button" data-copy="html" data-label="复制">复制</button>
+        </div>
+        <textarea data-html-code readonly></textarea>
+      </div>
+      <div class="code-block">
+        <div class="code-head">
+          <span>SVG 源码</span>
+          <button type="button" data-copy="svg" data-label="复制">复制</button>
+        </div>
+        <textarea data-svg-code readonly></textarea>
+      </div>
+      <div class="code-block">
+        <div class="code-head">
+          <span>Data URI</span>
+          <button type="button" data-copy="data-uri" data-label="复制">复制</button>
+        </div>
+        <textarea data-data-uri-code readonly></textarea>
+      </div>
+      <div class="code-block">
+        <div class="code-head">
+          <span>生成器链接</span>
+          <button type="button" data-copy="url" data-label="复制">复制</button>
+        </div>
+        <textarea data-url-code readonly></textarea>
+      </div>
+    </section>
+
+    <section class="notes">
+      <h2>部署和使用</h2>
+      <p>Nginx 只需要把站点根目录指向本文件夹。访问根路径打开生成器；访问 <code>/icon-badge.svg</code> 返回默认静态 badge。</p>
+      <p>纯静态 Nginx 无法按 URL 查询参数实时拼接 SVG。需要参数化直出时，应增加一个极小后端、Nginx njs/Lua，或使用本页面生成后下载成具体 SVG 文件。</p>
+    </section>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
