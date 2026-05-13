@@ -3,109 +3,65 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Icon Badge Generator</title>
+  <title>Icon Badge</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <main class="shell">
-    <section class="intro">
-      <div>
-        <p class="eyebrow">Dynamic SVG badge service</p>
-        <h1>Icon Badge</h1>
-        <p class="lead">按 HammCn/svg-badge-tool 的方式生成 SVG badge：根地址携带 key、value、bg 参数即可直接返回 SVG。这个页面只作为可视化辅助，正式使用时直接引用 URL。</p>
-      </div>
-      <a class="static-link" href="./badge.svg?key=Lang&value=Java17&bg=green">查看示例 badge</a>
+    <section class="hero">
+      <p class="eyebrow">SVG Badge Service</p>
+      <h1>Icon Badge</h1>
+      <p class="lead">通过 URL 参数直接生成 SVG badge，可用于 README、HTML 页面和文档站。</p>
     </section>
 
-    <section class="workspace">
-      <form class="panel controls" data-badge-form>
-        <label>
-          <span>key</span>
-          <input name="label" value="Lang" maxlength="64" autocomplete="off">
-        </label>
-        <label>
-          <span>value</span>
-          <input name="message" value="Java17" maxlength="64" autocomplete="off">
-        </label>
-        <label>
-          <span>bg</span>
-          <input name="color" value="green" list="colors" autocomplete="off">
-        </label>
-        <label>
-          <span>keyBg</span>
-          <input name="labelColor" value="#333333" autocomplete="off">
-        </label>
-        <label>
-          <span>radius</span>
-          <input name="radius" value="3" type="number" min="0" max="10" autocomplete="off">
-        </label>
-        <datalist id="colors">
-          <option value="green"></option>
-          <option value="blue"></option>
-          <option value="orange"></option>
-          <option value="purple"></option>
-          <option value="red"></option>
-          <option value="#0f766e"></option>
-        </datalist>
-      </form>
-
-      <section class="panel result">
-        <div class="preview-wrap">
-          <div class="preview" data-preview></div>
-        </div>
-        <div class="actions">
-          <button type="button" data-download>下载 SVG</button>
-          <button type="button" data-copy="svg" data-label="复制 SVG">复制 SVG</button>
-          <button type="button" data-copy="markdown" data-label="复制 Markdown">复制 Markdown</button>
-          <button type="button" data-copy="html" data-label="复制 HTML">复制 HTML</button>
-        </div>
-      </section>
-    </section>
-
-    <section class="outputs">
-      <div class="code-block">
-        <div class="code-head">
-          <span>HTML</span>
-          <button type="button" data-copy="html" data-label="复制">复制</button>
-        </div>
-        <textarea data-html-code readonly></textarea>
-      </div>
-      <div class="code-block">
-        <div class="code-head">
-          <span>README Markdown</span>
-          <button type="button" data-copy="markdown" data-label="复制">复制</button>
-        </div>
-        <textarea data-markdown-code readonly></textarea>
-      </div>
-      <div class="code-block">
-        <div class="code-head">
-          <span>SVG 源码</span>
-          <button type="button" data-copy="svg" data-label="复制">复制</button>
-        </div>
-        <textarea data-svg-code readonly></textarea>
-      </div>
-      <div class="code-block">
-        <div class="code-head">
-          <span>Data URI</span>
-          <button type="button" data-copy="data-uri" data-label="复制">复制</button>
-        </div>
-        <textarea data-data-uri-code readonly></textarea>
-      </div>
-      <div class="code-block">
-        <div class="code-head">
-          <span>直接访问地址</span>
-          <button type="button" data-copy="url" data-label="复制">复制</button>
-        </div>
-        <textarea data-url-code readonly></textarea>
-      </div>
-    </section>
-
-    <section class="notes">
+    <section class="panel">
       <h2>使用方式</h2>
-      <p>推荐直接引用根地址：<code>https://svg.example.com?key=Lang&amp;value=Java17&amp;bg=green</code>。</p>
-      <p>也支持：<code>/badge.svg?key=Lang&amp;value=Java17&amp;bg=green</code>。生成器页面建议挂到 <code>/ui/</code>。</p>
+      <div class="code-line">
+        <code>https://svg.example.com?key=Lang&amp;value=Java17&amp;bg=green</code>
+      </div>
+      <div class="preview-row">
+        <img src="./badge.svg?key=Lang&value=Java17&bg=green" alt="Lang: Java17">
+        <img src="./badge.svg?key=Base&value=SpringBoot3" alt="Base: SpringBoot3">
+        <img src="./badge.svg?key=ORM&value=JPA" alt="ORM: JPA">
+        <img src="./badge.svg?key=DB&value=MySQL" alt="DB: MySQL">
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>HTML 示例</h2>
+      <pre><code>&lt;img src="https://svg.example.com?key=Lang&amp;value=Java17&amp;bg=green"/&gt;
+&lt;img src="https://svg.example.com?key=Base&amp;value=SpringBoot3"/&gt;
+&lt;img src="https://svg.example.com?key=ORM&amp;value=JPA"/&gt;
+&lt;img src="https://svg.example.com?key=DB&amp;value=MySQL"/&gt;</code></pre>
+    </section>
+
+    <section class="panel">
+      <h2>参数</h2>
+      <table>
+        <tbody>
+          <tr>
+            <th>key</th>
+            <td>左侧文本，例如 <code>Lang</code></td>
+          </tr>
+          <tr>
+            <th>value</th>
+            <td>右侧文本，例如 <code>Java17</code></td>
+          </tr>
+          <tr>
+            <th>bg</th>
+            <td>右侧颜色，例如 <code>green</code>、<code>ff4500</code>、<code>#2da44e</code></td>
+          </tr>
+          <tr>
+            <th>keyBg</th>
+            <td>左侧颜色，默认 <code>#333333</code></td>
+          </tr>
+          <tr>
+            <th>radius</th>
+            <td>圆角，范围 <code>0</code> 到 <code>10</code></td>
+          </tr>
+        </tbody>
+      </table>
     </section>
   </main>
-  <script type="module" src="./app.js"></script>
 </body>
 </html>
