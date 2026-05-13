@@ -56,7 +56,7 @@ function textLength(text) {
   return /[a-zA-Z.+\-_#*/@0-9]/.test(text) ? 7 * text.length : 11 * text.length;
 }
 
-export function normalizeHttpArgs(args) {
+function normalizeHttpArgs(args) {
   const input = args || {};
   return {
     label: clampText(firstFilled(input.key, input.label), 'Key', 64),
@@ -67,7 +67,7 @@ export function normalizeHttpArgs(args) {
   };
 }
 
-export function renderBadgeSvg(input) {
+function renderBadgeSvg(input) {
   const options = normalizeHttpArgs(input);
   const key = escapeXml(options.label);
   const value = escapeXml(options.message);
@@ -108,4 +108,9 @@ function indexOrBadge(r) {
   r.internalRedirect('/index.html');
 }
 
-export default { badge, indexOrBadge };
+export default {
+  badge,
+  indexOrBadge,
+  normalizeHttpArgs,
+  renderBadgeSvg,
+};

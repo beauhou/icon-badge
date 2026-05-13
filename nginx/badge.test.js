@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeHttpArgs, renderBadgeSvg } from './badge.js';
+import badgeModule from './badge.js';
 
 test('normalizes hamm style key value bg query args', () => {
-  const options = normalizeHttpArgs({
+  const options = badgeModule.normalizeHttpArgs({
     key: 'Lang',
     value: 'Java17',
     bg: 'green',
@@ -15,7 +15,7 @@ test('normalizes hamm style key value bg query args', () => {
 });
 
 test('renders escaped svg for direct nginx response', () => {
-  const svg = renderBadgeSvg({
+  const svg = badgeModule.renderBadgeSvg({
     key: 'ORM',
     value: '<JPA>',
     bg: 'purple',
@@ -33,4 +33,6 @@ test('default export exposes root router and badge handler', async () => {
 
   assert.equal(typeof module.default.badge, 'function');
   assert.equal(typeof module.default.indexOrBadge, 'function');
+  assert.equal(typeof module.default.normalizeHttpArgs, 'function');
+  assert.equal(typeof module.default.renderBadgeSvg, 'function');
 });
