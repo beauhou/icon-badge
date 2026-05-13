@@ -26,6 +26,11 @@ test('renders escaped svg for direct nginx response', () => {
   assert.match(svg, /ORM/);
   assert.match(svg, /&lt;JPA&gt;/);
   assert.match(svg, /#7c3aed/);
+  assert.match(svg, /user-select:text/);
+  assert.match(svg, /pointer-events:none/);
+  assert.doesNotMatch(svg, /transform="scale\(\.1\)"/);
+  assert.doesNotMatch(svg, /textLength=/);
+  assert.doesNotMatch(svg, /animateMotion/);
 });
 
 test('default export exposes root router and badge handler', async () => {

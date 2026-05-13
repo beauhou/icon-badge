@@ -19,33 +19,6 @@ body {
   padding: 44px 0;
 }
 
-.hero {
-  margin-bottom: 22px;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  color: #607089;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 0;
-  font-size: 48px;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.lead {
-  max-width: 620px;
-  margin: 14px 0 0;
-  color: #4a5870;
-  font-size: 17px;
-  line-height: 1.7;
-}
-
 .panel {
   margin-top: 16px;
   padding: 18px;
@@ -120,7 +93,4 @@ td code {
     padding: 28px 0;
   }
 
-  h1 {
-    font-size: 38px;
-  }
 }

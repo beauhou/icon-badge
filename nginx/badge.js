@@ -76,21 +76,20 @@ function renderBadgeSvg(input) {
   const leftWidth = lenKey + 11;
   const rightWidth = lenValue + 11;
   const width = leftWidth + rightWidth;
-  const keyTextX = lenKey * 5 + 55;
-  const valueTextX = lenValue * 5 + 165 + lenKey * 10;
+  const keyTextX = Math.round(leftWidth / 2);
+  const valueTextX = Math.round(leftWidth + rightWidth / 2);
 
   return '<!-- This is build by svg tool, see more here: https://github.com/HammCn/svg-badge-tool -->' +
-    '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="20" role="img" aria-label="' + key + ': ' + value + '">' +
+    '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="20" role="img" aria-label="' + key + ': ' + value + '" style="user-select:text;-webkit-user-select:text">' +
     '<title>' + key + ': ' + value + '</title>' +
     '<linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient>' +
     '<clipPath id="a"><rect width="' + width + '" height="20" rx="' + options.radius + '" fill="#fff"/></clipPath>' +
     '<g clip-path="url(#a)"><path fill="' + options.labelColor + '" d="M0 0h' + leftWidth + 'v20H0z"/><path fill="' + options.color + '" d="M' + leftWidth + ' 0h' + rightWidth + 'v20H' + leftWidth + 'z"/><path fill="url(#b)" d="M0 0h' + width + 'v20H0z"/></g>' +
-    '<g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="110">' +
-    '<text x="' + keyTextX + '" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="' + (lenKey * 10) + '">' + key + '</text>' +
-    '<text x="' + keyTextX + '" y="140" transform="scale(.1)" textLength="' + (lenKey * 10) + '">' + key + '</text>' +
-    '<text x="' + valueTextX + '" y="150" fill="#010101" fill-opacity=".3" transform="scale(.1)" textLength="' + (lenValue * 10) + '">' + value + '</text>' +
-    '<text x="' + valueTextX + '" y="140" transform="scale(.1)" textLength="' + (lenValue * 10) + '">' + value + '</text>' +
-    '<animateMotion from="0, -50" to="0, 0" dur="0.3s" fill="freeze"/>' +
+    '<g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" style="user-select:text;-webkit-user-select:text">' +
+    '<text x="' + keyTextX + '" y="15" fill="#010101" fill-opacity=".3" style="user-select:none;pointer-events:none">' + key + '</text>' +
+    '<text x="' + keyTextX + '" y="14">' + key + '</text>' +
+    '<text x="' + valueTextX + '" y="15" fill="#010101" fill-opacity=".3" style="user-select:none;pointer-events:none">' + value + '</text>' +
+    '<text x="' + valueTextX + '" y="14">' + value + '</text>' +
     '</g></svg>';
 }
 
