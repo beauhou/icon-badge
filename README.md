@@ -4,16 +4,16 @@
 核心用法是直接在 HTML 或 README 中引用一个 URL，而不是打开页面复制粘贴：
 
 ```html
-<img src="https://svg.example.com?key=Lang&value=Java17&bg=green"/>
-<img src="https://svg.example.com?key=Base&value=SpringBoot3"/>
-<img src="https://svg.example.com?key=ORM&value=JPA"/>
-<img src="https://svg.example.com?key=DB&value=MySQL"/>
+<img src="https://badge.beauhou.cn?key=Lang&value=Java17&bg=green"/>
+<img src="https://badge.beauhou.cn?key=Base&value=SpringBoot3"/>
+<img src="https://badge.beauhou.cn?key=ORM&value=JPA"/>
+<img src="https://badge.beauhou.cn?key=DB&value=MySQL"/>
 ```
 
 README 用法：
 
 ```markdown
-![Lang](https://svg.example.com?key=Lang&value=Java17&bg=green)
+![Lang](https://badge.beauhou.cn?key=Lang&value=Java17&bg=green)
 ```
 
 ## 接口
@@ -21,14 +21,14 @@ README 用法：
 推荐：
 
 ```text
-https://svg.example.com?key=Lang&value=Java17&bg=green
+https://badge.beauhou.cn?key=Lang&value=Java17&bg=green
 ```
 
 兼容：
 
 ```text
-https://svg.example.com/badge.svg?key=Lang&value=Java17&bg=green
-https://svg.example.com/icon-badge.svg?key=Lang&value=Java17&bg=green
+https://badge.beauhou.cn/badge.svg?key=Lang&value=Java17&bg=green
+https://badge.beauhou.cn/icon-badge.svg?key=Lang&value=Java17&bg=green
 ```
 
 ## 参数
@@ -79,7 +79,7 @@ http {
 
     server {
         listen 80;
-        server_name svg.example.com;
+        server_name badge.beauhou.cn;
 
         root /opt/www/icon-badge;
         index index.html;
@@ -106,7 +106,7 @@ http {
 部署后必须确认动态接口返回 `image/svg+xml`，不能返回首页 HTML：
 
 ```bash
-curl -I "https://svg.example.com/badge.svg?key=Lang&value=Java17&bg=green"
+curl -I "https://badge.beauhou.cn/badge.svg?key=Lang&value=Java17&bg=green"
 ```
 
 ## 本地验证
