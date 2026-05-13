@@ -105,6 +105,7 @@ http {
 部署后确认动态接口返回 `image/svg+xml`：
 
 ```bash
+curl -I "https://badge.beauhou.cn/badge.svg?key=Lang&value=Java17&bg=green"
 curl -I "https://badge.beauhou.cn/kv?key=Lang&value=Java17&bg=green"
 ```
 
