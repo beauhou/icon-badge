@@ -21,18 +21,29 @@ function getFormOptions() {
 
 function setInitialValues() {
   const options = optionsFromSearch(window.location.search);
-  for (const [key, value] of Object.entries(options)) {
-    const field = form.elements.namedItem(key);
-    if (field) field.value = value;
+  const fieldMap = {
+    label: 'label',
+    message: 'message',
+    color: 'color',
+    labelColor: 'labelColor',
+    radius: 'radius',
+  };
+
+  for (const [optionName, fieldName] of Object.entries(fieldMap)) {
+    const field = form.elements.namedItem(fieldName);
+    if (field && options[optionName] !== undefined) field.value = options[optionName];
   }
+}
+
+function getEndpointUrl() {
+  if (window.location.pathname.startsWith('/ui')) return `${window.location.origin}/`;
+  return window.location.href.split('?')[0];
 }
 
 function updatePreview() {
   const options = getFormOptions();
   const svg = renderBadgeSvg(options);
-  const endpointUrl = window.location.pathname.startsWith('/ui')
-    ? `${window.location.origin}/`
-    : window.location.href.split('?')[0];
+  const endpointUrl = getEndpointUrl();
   const generatorUrl = buildHttpBadgeUrl(endpointUrl, options);
   const embed = buildEmbedCodes(endpointUrl, options);
 
@@ -54,7 +65,7 @@ function downloadSvg() {
   const blob = new Blob([svgCode.value], { type: 'image/svg+xml;charset=utf-8' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'icon-badge.svg';
+  link.download = 'badge.svg';
   link.click();
   URL.revokeObjectURL(link.href);
 }

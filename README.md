@@ -1,8 +1,8 @@
 # Icon Badge
 
-一个基于 Nginx njs 的动态 SVG badge 服务，同时保留可视化生成页面。
+参考 [HammCn/svg-badge-tool](https://github.com/HammCn/svg-badge-tool) 的动态 SVG badge 服务。
 
-目标用法类似：
+核心用法是直接在 HTML 或 README 中引用一个 URL，而不是打开页面复制粘贴：
 
 ```html
 <img src="https://svg.example.com?key=Lang&value=Java17&bg=green"/>
@@ -11,10 +11,25 @@
 <img src="https://svg.example.com?key=DB&value=MySQL"/>
 ```
 
-也可以在 README 中使用：
+README 用法：
 
 ```markdown
 ![Lang](https://svg.example.com?key=Lang&value=Java17&bg=green)
+```
+
+## 接口
+
+推荐：
+
+```text
+https://svg.example.com?key=Lang&value=Java17&bg=green
+```
+
+兼容：
+
+```text
+https://svg.example.com/badge.svg?key=Lang&value=Java17&bg=green
+https://svg.example.com/icon-badge.svg?key=Lang&value=Java17&bg=green
 ```
 
 ## 参数
@@ -23,46 +38,39 @@
 | --- | --- | --- |
 | `key` | 左侧文本 | `Lang` |
 | `value` | 右侧文本 | `Java17` |
-| `bg` | 右侧背景色 | `green`、`#2f80ed`、`2f80ed` |
-| `keyBg` | 左侧背景色 | `#555555` |
-| `logo` | 简短字符图标 | `*`、`OK` |
-| `style` | badge 风格 | `flat`、`flat-square`、`plastic`、`for-the-badge`、`outline`、`social` |
+| `bg` | 右侧背景色 | `green`、`ff4500`、`#2da44e` |
+| `keyBg` | 左侧背景色 | `333333`、`#333333` |
+| `radius` | 圆角，0 到 10 | `3` |
 
-兼容旧参数：`label` 等同于 `key`，`message` 等同于 `value`，`color` 等同于 `bg`，`labelColor` 等同于 `keyBg`。
-
-## 颜色别名
-
-支持：
+兼容旧参数：
 
 ```text
-blue, cyan, gray, green, orange, pink, purple, red,
-success, warning, critical, inactive
+label -> key
+message -> value
+color -> bg
+labelColor -> keyBg
 ```
 
-也支持十六进制颜色：
+## 输出效果
 
-```text
-#2f80ed
-2f80ed
-```
+输出为经典 20px 高度 SVG badge：
+
+- 左侧默认背景：`#333333`
+- 右侧默认背景：`#ff4500`
+- 支持渐变高光、文字阴影和圆角
+- 支持 XML 转义，避免特殊字符破坏 SVG
 
 ## Nginx njs 部署
 
-这种模式不需要单独启动 Node/Java 服务，但要求 Nginx 安装 `ngx_http_js_module`。
+此项目不需要单独启动 Node/Java 服务，但要求 Nginx 安装 `ngx_http_js_module`。
 
-把项目放到服务器：
+部署目录示例：
 
 ```bash
 /opt/www/icon-badge
 ```
 
-Nginx 配置示例见：
-
-```text
-nginx/icon-badge.conf
-```
-
-核心配置：
+配置示例：
 
 ```nginx
 load_module modules/ngx_http_js_module.so;
@@ -86,6 +94,10 @@ http {
             try_files $uri $uri/ /ui/index.html;
         }
 
+        location = /badge.svg {
+            js_content badge.badge;
+        }
+
         location = /icon-badge.svg {
             js_content badge.badge;
         }
@@ -93,15 +105,13 @@ http {
 }
 ```
 
-访问：
+生成器页面：
 
 ```text
-https://svg.example.com?key=Lang&value=Java17&bg=green
-https://svg.example.com?key=Base&value=SpringBoot3
 https://svg.example.com/ui/
 ```
 
-## 本地测试
+## 本地验证
 
 ```bash
 npm test

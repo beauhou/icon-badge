@@ -10,52 +10,41 @@
   <main class="shell">
     <section class="intro">
       <div>
-        <p class="eyebrow">Dynamic SVG badge tool</p>
+        <p class="eyebrow">Dynamic SVG badge service</p>
         <h1>Icon Badge</h1>
-        <p class="lead">生成可用于 README、文档页面、门户系统和普通 HTML 的 SVG badge。配合 Nginx njs 后，可以通过 URL 参数直接返回 SVG。</p>
+        <p class="lead">按 HammCn/svg-badge-tool 的方式生成 SVG badge：根地址携带 key、value、bg 参数即可直接返回 SVG。这个页面只作为可视化辅助，正式使用时直接引用 URL。</p>
       </div>
-      <a class="static-link" href="./icon-badge.svg">默认静态 badge</a>
+      <a class="static-link" href="./badge.svg?key=Lang&value=Java17&bg=green">查看示例 badge</a>
     </section>
 
     <section class="workspace">
       <form class="panel controls" data-badge-form>
         <label>
-          <span>左侧文本</span>
-          <input name="label" value="icon" maxlength="64" autocomplete="off">
+          <span>key</span>
+          <input name="label" value="Lang" maxlength="64" autocomplete="off">
         </label>
         <label>
-          <span>右侧文本</span>
-          <input name="message" value="badge" maxlength="64" autocomplete="off">
+          <span>value</span>
+          <input name="message" value="Java17" maxlength="64" autocomplete="off">
         </label>
         <label>
-          <span>图标字符</span>
-          <input name="logo" value="★" maxlength="4" autocomplete="off">
+          <span>bg</span>
+          <input name="color" value="green" list="colors" autocomplete="off">
         </label>
         <label>
-          <span>主色</span>
-          <input name="color" value="success" list="colors" autocomplete="off">
+          <span>keyBg</span>
+          <input name="labelColor" value="#333333" autocomplete="off">
         </label>
         <label>
-          <span>左侧底色</span>
-          <input name="labelColor" value="#555555" autocomplete="off">
-        </label>
-        <label>
-          <span>风格</span>
-          <select name="style">
-            <option value="flat">flat</option>
-            <option value="flat-square">flat-square</option>
-            <option value="plastic">plastic</option>
-            <option value="for-the-badge">for-the-badge</option>
-            <option value="outline">outline</option>
-            <option value="social">social</option>
-          </select>
+          <span>radius</span>
+          <input name="radius" value="3" type="number" min="0" max="10" autocomplete="off">
         </label>
         <datalist id="colors">
+          <option value="green"></option>
           <option value="blue"></option>
-          <option value="success"></option>
-          <option value="warning"></option>
-          <option value="critical"></option>
+          <option value="orange"></option>
           <option value="purple"></option>
+          <option value="red"></option>
           <option value="#0f766e"></option>
         </datalist>
       </form>
@@ -76,17 +65,17 @@
     <section class="outputs">
       <div class="code-block">
         <div class="code-head">
-          <span>README Markdown</span>
-          <button type="button" data-copy="markdown" data-label="复制">复制</button>
-        </div>
-        <textarea data-markdown-code readonly></textarea>
-      </div>
-      <div class="code-block">
-        <div class="code-head">
           <span>HTML</span>
           <button type="button" data-copy="html" data-label="复制">复制</button>
         </div>
         <textarea data-html-code readonly></textarea>
+      </div>
+      <div class="code-block">
+        <div class="code-head">
+          <span>README Markdown</span>
+          <button type="button" data-copy="markdown" data-label="复制">复制</button>
+        </div>
+        <textarea data-markdown-code readonly></textarea>
       </div>
       <div class="code-block">
         <div class="code-head">
@@ -104,7 +93,7 @@
       </div>
       <div class="code-block">
         <div class="code-head">
-          <span>生成器链接</span>
+          <span>直接访问地址</span>
           <button type="button" data-copy="url" data-label="复制">复制</button>
         </div>
         <textarea data-url-code readonly></textarea>
@@ -112,9 +101,9 @@
     </section>
 
     <section class="notes">
-      <h2>部署和使用</h2>
-      <p>动态部署时使用 <code>nginx/badge.js</code> 和 <code>nginx/icon-badge.conf</code>。访问根路径并携带 <code>key</code>、<code>value</code>、<code>bg</code> 参数即可直接返回 SVG。</p>
-      <p>示例：<code>https://svg.example.com?key=Lang&amp;value=Java17&amp;bg=green</code>。生成器页面建议挂到 <code>/ui/</code>。</p>
+      <h2>使用方式</h2>
+      <p>推荐直接引用根地址：<code>https://svg.example.com?key=Lang&amp;value=Java17&amp;bg=green</code>。</p>
+      <p>也支持：<code>/badge.svg?key=Lang&amp;value=Java17&amp;bg=green</code>。生成器页面建议挂到 <code>/ui/</code>。</p>
     </section>
   </main>
   <script type="module" src="./app.js"></script>

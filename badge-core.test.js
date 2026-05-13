@@ -2,20 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   buildBadgeUrl,
-  buildHttpBadgeUrl,
   buildEmbedCodes,
+  buildHttpBadgeUrl,
   normalizeBadgeOptions,
   renderBadgeSvg,
   svgToDataUri,
 } from './badge-core.js';
 
-test('normalizes missing options into a usable default badge', () => {
+test('normalizes missing options into a Hamm-style default badge', () => {
   const options = normalizeBadgeOptions({});
 
-  assert.equal(options.label, 'icon');
-  assert.equal(options.message, 'badge');
-  assert.equal(options.color, '#2f80ed');
-  assert.equal(options.style, 'flat');
+  assert.equal(options.label, 'Key');
+  assert.equal(options.message, 'Value');
+  assert.equal(options.color, '#ff4500');
+  assert.equal(options.labelColor, '#333333');
+  assert.equal(options.radius, 3);
 });
 
 test('accepts key value bg aliases for http badge usage', () => {
@@ -30,59 +31,51 @@ test('accepts key value bg aliases for http badge usage', () => {
   assert.equal(options.color, '#2da44e');
 });
 
-test('renders svg badge with escaped text and selected style', () => {
+test('renders classic 20px svg badge with escaped text', () => {
   const svg = renderBadgeSvg({
-    label: 'docs',
-    message: '<ready>',
-    color: 'success',
-    logo: '✓',
-    style: 'for-the-badge',
+    key: 'ORM',
+    value: '<JPA>',
+    bg: 'purple',
+    radius: 6,
   });
 
-  assert.match(svg, /^<svg /);
-  assert.match(svg, /DOCS/);
-  assert.match(svg, /&lt;READY&gt;/);
-  assert.match(svg, /#2da44e/);
+  assert.match(svg, /^<!-- This is build by svg tool/);
+  assert.match(svg, /height="20"/);
+  assert.match(svg, /ORM/);
+  assert.match(svg, /&lt;JPA&gt;/);
+  assert.match(svg, /#7c3aed/);
+  assert.match(svg, /rx="6"/);
 });
 
-test('builds direct svg url from relative base path', () => {
-  const url = buildBadgeUrl('/icon-badge.svg', {
-    label: 'build',
-    message: 'passing',
-    color: 'success',
-    style: 'flat-square',
-  });
-
-  assert.equal(
-    url,
-    '/icon-badge.svg?label=build&message=passing&color=success&style=flat-square',
-  );
-});
-
-test('builds hamm style http badge url', () => {
+test('builds root http badge url', () => {
   const url = buildHttpBadgeUrl('https://svg.example.com', {
-    label: 'Lang',
-    message: 'Java17',
-    color: 'green',
-    style: 'flat',
+    key: 'Lang',
+    value: 'Java17',
+    bg: 'green',
   });
 
   assert.equal(url, 'https://svg.example.com?key=Lang&value=Java17&bg=green');
 });
 
+test('builds badge url alias with key value params', () => {
+  const url = buildBadgeUrl('/badge.svg', {
+    label: 'build',
+    message: 'passing',
+    color: 'success',
+  });
+
+  assert.equal(url, '/badge.svg?key=build&value=passing&bg=success');
+});
+
 test('builds markdown and html embed snippets', () => {
-  const snippets = buildEmbedCodes('/icon-badge.svg', {
+  const snippets = buildEmbedCodes('/badge.svg', {
     label: 'api',
     message: 'v1',
     color: 'blue',
-    style: 'outline',
   });
 
-  assert.equal(
-    snippets.markdown,
-    '![api: v1](/icon-badge.svg?key=api&value=v1&bg=blue&style=outline)',
-  );
-  assert.match(snippets.html, /^<img src="\/icon-badge\.svg\?/);
+  assert.equal(snippets.markdown, '![api: v1](/badge.svg?key=api&value=v1&bg=blue)');
+  assert.match(snippets.html, /^<img src="\/badge\.svg\?/);
   assert.match(snippets.html, /alt="api: v1"/);
 });
 

@@ -19,10 +19,10 @@ test('renders escaped svg for direct nginx response', () => {
     key: 'ORM',
     value: '<JPA>',
     bg: 'purple',
-    style: 'flat-square',
   });
 
-  assert.match(svg, /^<svg /);
+  assert.match(svg, /^<!-- This is build by svg tool/);
+  assert.match(svg, /height="20"/);
   assert.match(svg, /ORM/);
   assert.match(svg, /&lt;JPA&gt;/);
   assert.match(svg, /#7c3aed/);
