@@ -1,73 +1,56 @@
 # Icon Badge
 
+通过不同路径生成不同参数形式的 SVG badge。
 
-核心用法是直接在 HTML 或 README 中引用一个 URL，而不是打开页面复制粘贴：
+## key / value
 
 ```html
-<img src="https://badge.beauhou.cn?key=Lang&value=Java17&bg=green"/>
-<img src="https://badge.beauhou.cn?key=Base&value=SpringBoot3"/>
-<img src="https://badge.beauhou.cn?key=ORM&value=JPA"/>
-<img src="https://badge.beauhou.cn?key=DB&value=MySQL"/>
+<img src="https://badge.beauhou.cn/kv?key=Lang&value=Java17&bg=green"/>
+<img src="https://badge.beauhou.cn/kv?key=DB&value=MySQL"/>
 ```
 
-README 用法：
+## label / message
 
-```markdown
-![Lang](https://badge.beauhou.cn?key=Lang&value=Java17&bg=green)
+```html
+<img src="https://badge.beauhou.cn/label?label=Build&message=Passing&bg=green"/>
+<img src="https://badge.beauhou.cn/label?label=License&message=MIT&bg=blue"/>
 ```
 
-## 接口
+## name / status
 
-推荐：
+```html
+<img src="https://badge.beauhou.cn/status?name=API&status=Online&bg=green"/>
+<img src="https://badge.beauhou.cn/status?name=Deploy&status=Ready&bg=purple"/>
+```
+
+## name / version
+
+```html
+<img src="https://badge.beauhou.cn/tech?name=SpringBoot&version=3"/>
+<img src="https://badge.beauhou.cn/tech?name=Java&version=17&bg=green"/>
+```
+
+## 兼容路径
+
+旧的根路径和 SVG 文件路径仍可用：
 
 ```text
 https://badge.beauhou.cn?key=Lang&value=Java17&bg=green
-```
-
-兼容：
-
-```text
 https://badge.beauhou.cn/badge.svg?key=Lang&value=Java17&bg=green
 https://badge.beauhou.cn/icon-badge.svg?key=Lang&value=Java17&bg=green
 ```
 
-## 参数
+## 通用参数
 
 | 参数 | 说明 | 示例 |
 | --- | --- | --- |
-| `key` | 左侧文本 | `Lang` |
-| `value` | 右侧文本 | `Java17` |
 | `bg` | 右侧背景色 | `green`、`ff4500`、`#2da44e` |
 | `keyBg` | 左侧背景色 | `333333`、`#333333` |
 | `radius` | 圆角，0 到 10 | `3` |
 
-兼容旧参数：
-
-```text
-label -> key
-message -> value
-color -> bg
-labelColor -> keyBg
-```
-
-## 输出效果
-
-输出为经典 20px 高度 SVG badge：
-
-- 左侧默认背景：`#333333`
-- 右侧默认背景：`#ff4500`
-- 支持渐变高光、文字阴影和圆角
-- 支持 XML 转义，避免特殊字符破坏 SVG
-
 ## Nginx njs 部署
 
 此项目不需要单独启动 Node/Java 服务，但要求 Nginx 安装 `ngx_http_js_module`。
-
-部署目录示例：
-
-```bash
-/opt/www/icon-badge
-```
 
 配置示例：
 
@@ -88,6 +71,22 @@ http {
             js_content badge.indexOrBadge;
         }
 
+        location = /kv {
+            js_content badge.kv;
+        }
+
+        location = /label {
+            js_content badge.label;
+        }
+
+        location = /status {
+            js_content badge.status;
+        }
+
+        location = /tech {
+            js_content badge.tech;
+        }
+
         location = /badge.svg {
             js_content badge.badge;
         }
@@ -103,10 +102,10 @@ http {
 }
 ```
 
-部署后必须确认动态接口返回 `image/svg+xml`，不能返回首页 HTML：
+部署后确认动态接口返回 `image/svg+xml`：
 
 ```bash
-curl -I "https://badge.beauhou.cn/badge.svg?key=Lang&value=Java17&bg=green"
+curl -I "https://badge.beauhou.cn/kv?key=Lang&value=Java17&bg=green"
 ```
 
 ## 本地验证

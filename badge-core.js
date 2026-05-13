@@ -64,6 +64,31 @@ export function normalizeBadgeOptions(input = {}) {
   };
 }
 
+export function normalizeModeOptions(mode, input = {}) {
+  if (mode === 'label') {
+    return {
+      key: firstFilled(input.label, input.key),
+      value: firstFilled(input.message, input.value),
+    };
+  }
+  if (mode === 'status') {
+    return {
+      key: firstFilled(input.name, input.key, input.label),
+      value: firstFilled(input.status, input.value, input.message),
+    };
+  }
+  if (mode === 'tech') {
+    return {
+      key: firstFilled(input.name, input.key, input.label),
+      value: firstFilled(input.version, input.value, input.message),
+    };
+  }
+  return {
+    key: firstFilled(input.key, input.label),
+    value: firstFilled(input.value, input.message),
+  };
+}
+
 export function renderBadgeSvg(input = {}) {
   const options = normalizeBadgeOptions(input);
   const key = escapeXml(options.label);

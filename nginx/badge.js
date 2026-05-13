@@ -67,6 +67,38 @@ function normalizeHttpArgs(args) {
   };
 }
 
+function normalizeModeArgs(mode, input) {
+  const args = input || {};
+  if (mode === 'label') {
+    return {
+      key: firstFilled(args.label, args.key),
+      value: firstFilled(args.message, args.value),
+      bg: firstFilled(args.bg, args.color),
+      keyBg: firstFilled(args.keyBg, args.labelColor),
+      radius: args.radius,
+    };
+  }
+  if (mode === 'status') {
+    return {
+      key: firstFilled(args.name, args.key, args.label),
+      value: firstFilled(args.status, args.value, args.message),
+      bg: firstFilled(args.bg, args.color),
+      keyBg: firstFilled(args.keyBg, args.labelColor),
+      radius: args.radius,
+    };
+  }
+  if (mode === 'tech') {
+    return {
+      key: firstFilled(args.name, args.key, args.label),
+      value: firstFilled(args.version, args.value, args.message),
+      bg: firstFilled(args.bg, args.color),
+      keyBg: firstFilled(args.keyBg, args.labelColor),
+      radius: args.radius,
+    };
+  }
+  return args;
+}
+
 function renderBadgeSvg(input) {
   const options = normalizeHttpArgs(input);
   const key = escapeXml(options.label);
@@ -99,6 +131,14 @@ function badge(r) {
   r.return(200, renderBadgeSvg(r.args || {}));
 }
 
+function modeBadge(mode) {
+  return function handleModeBadge(r) {
+    r.headersOut['Content-Type'] = 'image/svg+xml; charset=utf-8';
+    r.headersOut['Cache-Control'] = 'public, max-age=300';
+    r.return(200, renderBadgeSvg(normalizeModeArgs(mode, r.args || {})));
+  };
+}
+
 function indexOrBadge(r) {
   if (firstFilled(r.args.key, r.args.label, r.args.value, r.args.message)) {
     badge(r);
@@ -110,6 +150,10 @@ function indexOrBadge(r) {
 export default {
   badge,
   indexOrBadge,
+  kv: modeBadge('kv'),
+  label: modeBadge('label'),
+  status: modeBadge('status'),
+  tech: modeBadge('tech'),
   normalizeHttpArgs,
   renderBadgeSvg,
 };

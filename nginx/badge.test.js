@@ -40,4 +40,8 @@ test('default export exposes root router and badge handler', async () => {
   assert.equal(typeof module.default.indexOrBadge, 'function');
   assert.equal(typeof module.default.normalizeHttpArgs, 'function');
   assert.equal(typeof module.default.renderBadgeSvg, 'function');
+  assert.equal(typeof module.default.kv, 'function');
+  assert.equal(typeof module.default.label, 'function');
+  assert.equal(typeof module.default.status, 'function');
+  assert.equal(typeof module.default.tech, 'function');
 });

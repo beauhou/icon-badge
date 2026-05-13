@@ -4,6 +4,7 @@ import {
   buildBadgeUrl,
   buildEmbedCodes,
   buildHttpBadgeUrl,
+  normalizeModeOptions,
   normalizeBadgeOptions,
   renderBadgeSvg,
   svgToDataUri,
@@ -60,6 +61,25 @@ test('builds root http badge url', () => {
   });
 
   assert.equal(url, 'https://svg.example.com?key=Lang&value=Java17&bg=green');
+});
+
+test('normalizes route-specific query modes', () => {
+  assert.deepEqual(normalizeModeOptions('kv', { key: 'Lang', value: 'Java17' }), {
+    key: 'Lang',
+    value: 'Java17',
+  });
+  assert.deepEqual(normalizeModeOptions('label', { label: 'Build', message: 'Passing' }), {
+    key: 'Build',
+    value: 'Passing',
+  });
+  assert.deepEqual(normalizeModeOptions('status', { name: 'API', status: 'Online' }), {
+    key: 'API',
+    value: 'Online',
+  });
+  assert.deepEqual(normalizeModeOptions('tech', { name: 'Java', version: '17' }), {
+    key: 'Java',
+    value: '17',
+  });
 });
 
 test('builds badge url alias with key value params', () => {
