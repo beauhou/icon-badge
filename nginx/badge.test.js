@@ -47,11 +47,11 @@ test('default export exposes root router and badge handler', async () => {
 });
 
 test('renders mode styles with distinct visual output', () => {
-  const labelSvg = badgeModule.renderBadgeSvg({ key: 'Build', value: 'Passing', style: 'flat' });
-  const statusSvg = badgeModule.renderBadgeSvg({ key: 'API', value: 'Online', style: 'pill' });
-  const techSvg = badgeModule.renderBadgeSvg({ key: 'Java', value: '17', style: 'outline' });
+  const labelSvg = badgeModule.renderBadgeSvg({ key: 'Build', value: 'Passing', style: 'solid' });
+  const statusSvg = badgeModule.renderBadgeSvg({ key: 'API', value: 'Online', style: 'status' });
+  const techSvg = badgeModule.renderBadgeSvg({ key: 'Java', value: '17', style: 'tech' });
 
-  assert.match(labelSvg, /data-style="flat"/);
-  assert.match(statusSvg, /data-style="pill"/);
-  assert.match(techSvg, /data-style="outline"/);
+  assert.match(labelSvg, /data-style="solid"/);
+  assert.match(statusSvg, /<circle /);
+  assert.match(techSvg, /data-style="tech"/);
 });

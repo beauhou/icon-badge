@@ -51,7 +51,7 @@ function normalizeRadius(value) {
 }
 
 function normalizeStyle(value) {
-  return ['classic', 'flat', 'pill', 'outline'].includes(value) ? value : 'classic';
+  return ['classic', 'solid', 'status', 'tech'].includes(value) ? value : 'classic';
 }
 
 function textLength(text) {
@@ -100,22 +100,45 @@ export function renderBadgeSvg(input = {}) {
   const value = escapeXml(options.message);
   const lenKey = textLength(options.label);
   const lenValue = textLength(options.message);
+  if (options.style === 'solid') {
+    const text = escapeXml(`${options.label} ${options.message}`);
+    const width = textLength(`${options.label} ${options.message}`) + 22;
+    return `<!-- This is build by svg tool, see more here: https://github.com/HammCn/svg-badge-tool -->
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="22" role="img" aria-label="${key}: ${value}" data-style="solid" style="user-select:text;-webkit-user-select:text">
+  <title>${key}: ${value}</title>
+  <rect width="${width}" height="22" rx="3" fill="${options.color}"/>
+  <text x="${Math.round(width / 2)}" y="15" fill="#ffffff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${text}</text>
+</svg>`;
+  }
+  if (options.style === 'status') {
+    const width = lenKey + lenValue + 34;
+    return `<!-- This is build by svg tool, see more here: https://github.com/HammCn/svg-badge-tool -->
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="22" role="img" aria-label="${key}: ${value}" data-style="status" style="user-select:text;-webkit-user-select:text">
+  <title>${key}: ${value}</title>
+  <rect width="${width}" height="22" rx="11" fill="#ffffff" stroke="#d1d5db"/>
+  <circle cx="12" cy="11" r="4" fill="${options.color}"/>
+  <text x="22" y="15" fill="#1f2937" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${key}</text>
+  <text x="${lenKey + 28}" y="15" fill="${options.color}" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" font-weight="700">${value}</text>
+</svg>`;
+  }
+  if (options.style === 'tech') {
+    const leftWidth = lenKey + 18;
+    const rightWidth = lenValue + 22;
+    const width = leftWidth + rightWidth;
+    return `<!-- This is build by svg tool, see more here: https://github.com/HammCn/svg-badge-tool -->
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="24" role="img" aria-label="${key}: ${value}" data-style="tech" style="user-select:text;-webkit-user-select:text">
+  <title>${key}: ${value}</title>
+  <rect x="0.5" y="0.5" width="${width - 1}" height="23" rx="12" fill="#ffffff" stroke="${options.color}"/>
+  <rect x="${leftWidth}" y="3" width="${rightWidth - 4}" height="18" rx="9" fill="${options.color}"/>
+  <text x="10" y="16" fill="#1f2937" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">${key}</text>
+  <text x="${leftWidth + Math.round((rightWidth - 4) / 2)}" y="16" fill="#ffffff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" font-weight="700">${value}</text>
+</svg>`;
+  }
   const leftWidth = lenKey + 11;
   const rightWidth = lenValue + 11;
   const width = leftWidth + rightWidth;
   const keyTextX = Math.round(leftWidth / 2);
   const valueTextX = Math.round(leftWidth + rightWidth / 2);
-  const styleRadius = options.style === 'flat' ? 0 : options.style === 'pill' ? 10 : options.radius;
-  const isOutline = options.style === 'outline';
-  const leftFill = isOutline ? '#ffffff' : options.labelColor;
-  const rightFill = isOutline ? '#ffffff' : options.color;
-  const textFill = isOutline ? '#1f2937' : '#ffffff';
-  const border = isOutline
-    ? `<rect x="0.5" y="0.5" width="${width - 1}" height="19" rx="${styleRadius}" fill="none" stroke="${options.color}"/>`
-    : '';
-  const divider = isOutline
-    ? `<line x1="${leftWidth}" y1="4" x2="${leftWidth}" y2="16" stroke="#d1d5db"/>`
-    : '';
 
   return `<!-- This is build by svg tool, see more here: https://github.com/HammCn/svg-badge-tool -->
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="20" role="img" aria-label="${key}: ${value}" data-style="${options.style}" style="user-select:text;-webkit-user-select:text">
@@ -125,16 +148,14 @@ export function renderBadgeSvg(input = {}) {
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
   <clipPath id="a">
-    <rect width="${width}" height="20" rx="${styleRadius}" fill="#fff"/>
+    <rect width="${width}" height="20" rx="${options.radius}" fill="#fff"/>
   </clipPath>
   <g clip-path="url(#a)">
-    <path fill="${leftFill}" d="M0 0h${leftWidth}v20H0z"/>
-    <path fill="${rightFill}" d="M${leftWidth} 0h${rightWidth}v20H${leftWidth}z"/>
-    ${isOutline ? '' : `<path fill="url(#b)" d="M0 0h${width}v20H0z"/>`}
+    <path fill="${options.labelColor}" d="M0 0h${leftWidth}v20H0z"/>
+    <path fill="${options.color}" d="M${leftWidth} 0h${rightWidth}v20H${leftWidth}z"/>
+    <path fill="url(#b)" d="M0 0h${width}v20H0z"/>
   </g>
-  ${border}
-  ${divider}
-  <g fill="${textFill}" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" style="user-select:text;-webkit-user-select:text">
+  <g fill="#ffffff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" style="user-select:text;-webkit-user-select:text">
     <text x="${keyTextX}" y="15" fill="#010101" fill-opacity=".3" style="user-select:none;pointer-events:none">${key}</text>
     <text x="${keyTextX}" y="14">${key}</text>
     <text x="${valueTextX}" y="15" fill="#010101" fill-opacity=".3" style="user-select:none;pointer-events:none">${value}</text>

@@ -54,16 +54,16 @@ test('renders classic 20px svg badge with escaped text', () => {
 });
 
 test('renders different visual styles', () => {
-  const flat = renderBadgeSvg({ key: 'Build', value: 'Passing', style: 'flat' });
-  const pill = renderBadgeSvg({ key: 'API', value: 'Online', style: 'pill' });
-  const outline = renderBadgeSvg({ key: 'Java', value: '17', style: 'outline' });
+  const solid = renderBadgeSvg({ key: 'Build', value: 'Passing', style: 'solid' });
+  const status = renderBadgeSvg({ key: 'API', value: 'Online', style: 'status' });
+  const tech = renderBadgeSvg({ key: 'Java', value: '17', style: 'tech' });
 
-  assert.match(flat, /data-style="flat"/);
-  assert.match(flat, /rx="0"/);
-  assert.match(pill, /data-style="pill"/);
-  assert.match(pill, /rx="10"/);
-  assert.match(outline, /data-style="outline"/);
-  assert.match(outline, /stroke=/);
+  assert.match(solid, /data-style="solid"/);
+  assert.match(solid, /Build Passing/);
+  assert.match(status, /data-style="status"/);
+  assert.match(status, /<circle /);
+  assert.match(tech, /data-style="tech"/);
+  assert.match(tech, /<rect x="0\.5"/);
 });
 
 test('builds root http badge url', () => {
